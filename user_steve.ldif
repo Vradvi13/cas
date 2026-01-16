@@ -1,0 +1,10 @@
+dn: uid=steve,ou=people,dc=example,dc=org
+objectClass: inetOrgPerson
+cn: Steve
+sn: Tchabo
+givenName: Steve
+uid: steve
+mail: steve@example.org
+userPassword: Steve123!
+
+

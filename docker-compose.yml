@@ -1,0 +1,44 @@
+services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    container_name: openldap
+    environment:
+      LDAP_ORGANISATION: "MyOrg"
+      LDAP_DOMAIN: "example.org"
+      LDAP_ADMIN_PASSWORD: "admin"
+    ports:
+      - "389:389"
+    volumes:
+      - ldap_data:/var/lib/ldap
+      - ldap_config:/etc/ldap/slapd.d
+  cas:
+    image: apereo/cas:7.0.3
+    container_name: cas
+    depends_on:
+      - openldap
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./cas-config:/etc/cas/config
+      - ./cas-services:/etc/cas/services
+    environment:
+      JAVA_OPTS: "-Xms512m -Xmx1536m"
+      SERVER_SSL_ENABLED: "false"
+      SERVER_PORT: "8080"
+      SPRING_DEVTOOLS_RESTART_ENABLED: "false"
+      
+  lam:
+    image: ldapaccountmanager/lam:latest
+    container_name: lam
+    depends_on:
+      - openldap
+    ports:
+      - "8081:80"
+    environment:
+      LDAP_SERVER: "ldap://openldap:389"
+      LDAP_DOMAIN: "dc=example,dc=org"
+      LDAP_BASE_DN: "dc=example,dc=org"
+
+volumes:
+  ldap_data:
+  ldap_config:

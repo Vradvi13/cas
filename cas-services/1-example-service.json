@@ -1,0 +1,7 @@
+{
+  "@class": "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId": "^http://.*",
+  "name": "Allow All HTTP (LAB)",
+  "id": 999,
+  "evaluationOrder": 1
+}
